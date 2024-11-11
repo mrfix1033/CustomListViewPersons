@@ -4,11 +4,9 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.ListAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -17,7 +15,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import ru.mrfix1033.customlistview.adapters.CustomListAdapter
 import ru.mrfix1033.customlistview.data.Person
-import ru.mrfix1033.customlistview.enumerations.ResultCode
+import ru.mrfix1033.customlistview.enumerations.RequestCode
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         imageViewAvatar.setOnClickListener {
             val photoPickerIntent = Intent(Intent.ACTION_PICK)
             photoPickerIntent.type = "image/*"
-            startActivityForResult(intent, ResultCode.PICK_FROM_GALLERY)
+            startActivityForResult(photoPickerIntent, RequestCode.PICK_FROM_GALLERY)
         }
 
         buttonSave.setOnClickListener {
@@ -60,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         val personName = editTextName.text.toString()
         val personAge = editTextAge.text.toString().toIntOrNull()
         if (personAge == null) {
-            Toast.makeText(this, "В возрасте введено не число!", Toast.LENGTH_SHORT)
+            Toast.makeText(this, "В возрасте введено не число!", Toast.LENGTH_SHORT).show()
             return false
         }
         val personPhoneNumber = editTextPhoneNumber.text.toString()
@@ -93,7 +91,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode) {
-            ResultCode.PICK_FROM_GALLERY -> {
+            RequestCode.PICK_FROM_GALLERY -> {
                 if (resultCode == RESULT_OK) {
                     val selectedImageUri = data!!.data
                     bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedImageUri)
